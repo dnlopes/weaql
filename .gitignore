@@ -1,0 +1,12 @@
+# Directories
+
+# MacOS X
+**/*.DS_Store
+
+# Compiled Object files
+*.class
+scripts/*.pyc
+# IDE
+*.iml
+**/*.idea
+*.sublime-workspace
