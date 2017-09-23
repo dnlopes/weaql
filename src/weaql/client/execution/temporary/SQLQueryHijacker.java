@@ -1,7 +1,6 @@
 package weaql.client.execution.temporary;
 
 
-import applications.util.SymbolsManager;
 import weaql.client.execution.TransactionContext;
 import weaql.client.operation.*;
 import weaql.common.database.Record;
@@ -10,6 +9,7 @@ import weaql.common.database.field.DataField;
 import weaql.common.database.util.DatabaseCommon;
 import weaql.common.thrift.ThriftUtils;
 import weaql.common.thrift.UniqueValue;
+import weaql.common.util.SymbolsManager;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
