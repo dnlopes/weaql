@@ -32,7 +32,7 @@ public class IDsManager
 
 	private Map<String, IDGenerator> idsGenerators;
 
-	public IDsManager(String prefix, NodeConfig replicatorConfig) throws InitComponentFailureException
+	public IDsManager(String prefix, NodeConfig replicatorConfig)
 	{
 		PREFIX = prefix;
 		this.idsGenerators = new HashMap<>();
@@ -55,7 +55,7 @@ public class IDsManager
 		return nextId;
 	}
 
-	private void setup(NodeConfig config) throws InitComponentFailureException
+	private void setup(NodeConfig config)
 	{
 		if(LOG.isTraceEnabled())
 			LOG.trace("bootstraping id generators for auto increment fields");
@@ -68,21 +68,28 @@ public class IDsManager
 		}
 	}
 
-	private void createIdGenerator(DataField field, NodeConfig config) throws InitComponentFailureException
+	private void createIdGenerator(DataField field, NodeConfig config)
 	{
 		String key = field.getTableName() + "_" + field.getFieldName();
 
 		if(this.idsGenerators.containsKey(key))
 		{
-			LOG.warn("ids generator already created. Silently ignored");
+			LOG.warn("ids generator already created.");
 			return;
 		}
-		IDGenerator newGenerator = new IDGenerator(field, config, Topology.getInstance().getReplicatorsCount());
+				
+		try {
+			
+			IDGenerator newGenerator = new IDGenerator(field, config, Topology.getInstance().getReplicatorsCount());		
+			this.idsGenerators.put(key, newGenerator);
+			LOG.trace("id generator for field {} created. Initial value {}", field.getFieldName(),
+					newGenerator.getCurrentValue());
 
-		this.idsGenerators.put(key, newGenerator);
-
-		LOG.trace("id generator for field {} created. Initial value {}", field.getFieldName(),
-				newGenerator.getCurrentValue());
+		} catch (InitComponentFailureException e) {
+						
+			LOG.warn("id generator for field {} failed. Reason: {}", field.getFieldName(),
+					e.getMessage());
+		}
 	}
 
 	private class IDGenerator
